@@ -130,7 +130,7 @@ export default function GalleryCarousel() {
   // Duplicate items for seamless loop
   const loopItems = useMemo(() => [...items, ...items], []);
 
-  useAnimationFrame((t, delta) => {
+  useAnimationFrame((_t, delta) => {
     if (paused.current) return;
 
     const el = trackRef.current;
