@@ -11,9 +11,22 @@ const app = express();
 app.use(express.json());
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin: (origin, cb) => {
+      const allowed = [
+        process.env.FRONTEND_URL, // Vercel frontend
+        "http://localhost:5173",  // local dev
+      ].filter(Boolean);
+
+      // allow non-browser tools (Postman, curl)
+      if (!origin) return cb(null, true);
+
+      if (allowed.includes(origin)) return cb(null, true);
+      return cb(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
   })
 );
+
 
 // Routes
 app.use("/api/contact", contactRouter);
