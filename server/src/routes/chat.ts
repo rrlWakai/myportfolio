@@ -135,6 +135,10 @@ Rules:
         maxOutputTokens: 300,
       },
     });
+    router.get("/", (_req, res) => {
+  res.json({ ok: true, route: "/api/chat", method: "GET" });
+});
+
 
     const reply =
       result?.candidates?.[0]?.content?.parts

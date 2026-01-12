@@ -1,6 +1,13 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type KeyboardEvent as ReactKeyboardEvent,
+} from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Send, X, Trash2 } from "lucide-react";
+import { Link } from "react-router-dom";
 
 type Role = "user" | "assistant";
 
@@ -24,6 +31,60 @@ const STARTER: ChatMsg = {
   text: "Hi! I’m Rhen-Rhen’s portfolio assistant. Ask me about skills, services, or projects.",
 };
 
+// ✅ Set in Vercel env vars:
+// VITE_API_BASE_URL = https://myportfolio-server.onrender.com
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
+function linkify(text: string) {
+  const parts: React.ReactNode[] = [];
+  const urlRegex = /(https?:\/\/[^\s]+)|(\bContact page\b)/gi;
+
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = urlRegex.exec(text)) !== null) {
+    const start = match.index;
+    const end = start + match[0].length;
+
+    if (start > lastIndex) parts.push(text.slice(lastIndex, start));
+
+    const token = match[0];
+
+    // "Contact page" → internal SPA link
+    if (/^contact page$/i.test(token)) {
+      parts.push(
+        <Link
+          key={`${start}-${end}`}
+          to="/contact"
+          className="underline underline-offset-2 font-medium"
+        >
+          Contact page
+        </Link>
+      );
+    } else {
+      // URL → external link (trim trailing punctuation)
+      const clean = token.replace(/[),.!?]+$/g, "");
+
+      parts.push(
+        <a
+          key={`${start}-${end}`}
+          href={clean}
+          target="_blank"
+          rel="noreferrer"
+          className="underline underline-offset-2"
+        >
+          {clean}
+        </a>
+      );
+    }
+
+    lastIndex = end;
+  }
+
+  if (lastIndex < text.length) parts.push(text.slice(lastIndex));
+  return parts;
+}
+
 export default function ChatWidget() {
   const [open, setOpen] = useState(false);
   const [input, setInput] = useState("");
@@ -39,7 +100,6 @@ export default function ChatWidget() {
     [messages]
   );
 
-  // Scroll to bottom when open/new messages
   useEffect(() => {
     if (!open) return;
     listRef.current?.scrollTo({
@@ -48,14 +108,12 @@ export default function ChatWidget() {
     });
   }, [open, messages, loading]);
 
-  // Focus input when opening
   useEffect(() => {
     if (!open) return;
     const t = window.setTimeout(() => inputRef.current?.focus(), 50);
     return () => window.clearTimeout(t);
   }, [open]);
 
-  // ESC to close
   useEffect(() => {
     function onKey(e: KeyboardEvent) {
       if (e.key === "Escape") setOpen(false);
@@ -64,7 +122,6 @@ export default function ChatWidget() {
     return () => window.removeEventListener("keydown", onKey);
   }, [open]);
 
-  // Click outside to close
   useEffect(() => {
     function onMouseDown(e: MouseEvent) {
       if (!open) return;
@@ -81,18 +138,29 @@ export default function ChatWidget() {
 
     setInput("");
     setLoading(true);
-
     setMessages((prev) => [...prev, { role: "user", text }]);
 
     try {
-      // ✅ Use proxy path (set in vite.config.ts)
-      const res = await fetch("/api/chat", {
+      if (!API_BASE) {
+        throw new Error(
+          "Missing VITE_API_BASE_URL. Please set it in Vercel Environment Variables."
+        );
+      }
+
+      const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: text, history }),
       });
 
-      const data: ChatApiResponse = await res.json();
+      const raw = await res.text();
+      let data: ChatApiResponse;
+
+      try {
+        data = JSON.parse(raw) as ChatApiResponse;
+      } catch {
+        throw new Error(raw.slice(0, 140));
+      }
 
       if (!res.ok) throw new Error(data.error ?? "Chat request failed.");
 
@@ -101,8 +169,7 @@ export default function ChatWidget() {
         { role: "assistant", text: data.reply ?? "…" },
       ]);
     } catch (err) {
-      const msg = err instanceof Error ? err.message : "Unknown error occurred";
-      console.error(msg);
+      console.error(err);
 
       setMessages((prev) => [
         ...prev,
@@ -113,12 +180,11 @@ export default function ChatWidget() {
       ]);
     } finally {
       setLoading(false);
-      // keep focus ready for the next message
       inputRef.current?.focus();
     }
   }
 
-  function onKeyDown(e: React.KeyboardEvent<HTMLInputElement>) {
+  function onKeyDown(e: ReactKeyboardEvent<HTMLInputElement>) {
     if (e.key === "Enter") sendMessage();
   }
 
@@ -128,7 +194,6 @@ export default function ChatWidget() {
 
   return (
     <>
-      {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
         className="
@@ -147,7 +212,6 @@ export default function ChatWidget() {
         <Bot size={18} />
       </button>
 
-      {/* Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -169,13 +233,11 @@ export default function ChatWidget() {
             aria-modal="true"
             aria-label="Portfolio assistant chat"
           >
-            {/* Header */}
             <div className="px-4 py-3 flex items-center justify-between border-b border-black/10 dark:border-white/10">
               <div className="flex items-center gap-3">
                 <span className="inline-flex w-9 h-9 items-center justify-center rounded-xl bg-black/5 dark:bg-white/10 ring-1 ring-black/10 dark:ring-white/10">
                   <Bot size={16} className="text-accent" />
                 </span>
-
                 <div className="leading-tight">
                   <p className="text-sm font-semibold text-head">
                     Portfolio Assistant
@@ -221,20 +283,17 @@ export default function ChatWidget() {
               </div>
             </div>
 
-            {/* Messages */}
             <div
               ref={listRef}
               className="
                 relative
                 max-h-[380px] overflow-y-auto
                 px-3.5 py-3.5 space-y-2.5
-
                 [scrollbar-width:thin]
                 [scrollbar-color:rgba(0,0,0,.18)_transparent]
                 dark:[scrollbar-color:rgba(255,255,255,.18)_transparent]
               "
             >
-              {/* Background texture (design only) */}
               <div
                 aria-hidden="true"
                 className="
@@ -243,9 +302,7 @@ export default function ChatWidget() {
                   [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]
                 "
               >
-                {/* soft gradient wash */}
                 <div className="absolute inset-0 bg-gradient-to-b from-black/[0.03] via-transparent to-black/[0.04] dark:from-white/[0.05] dark:to-white/[0.02]" />
-                {/* subtle grid texture */}
                 <div
                   className="
                     absolute inset-0 opacity-[0.10] dark:opacity-[0.12]
@@ -279,7 +336,7 @@ export default function ChatWidget() {
                         }
                       `}
                     >
-                      {m.text}
+                      {linkify(m.text)}
                     </div>
                   </div>
                 );
@@ -301,7 +358,6 @@ export default function ChatWidget() {
               )}
             </div>
 
-            {/* Input */}
             <div className="p-3 border-t border-black/10 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <input
