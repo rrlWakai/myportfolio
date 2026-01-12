@@ -10,12 +10,16 @@ import {
   Github,
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { API_BASE_URL } from "../config"; // e.g., "http://localhost:5000/api"
+import { API_BASE } from "../config";
+
+type ContactApiResponse = {
+  success?: boolean;
+  error?: string;
+};
 
 export default function Contact() {
   const navigate = useNavigate();
 
-  // Form state
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
@@ -23,6 +27,7 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!name || !email || !message) {
       alert("Please fill in all fields.");
       return;
@@ -30,13 +35,22 @@ export default function Contact() {
 
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE_URL}/contact`, {
+      const res = await fetch(`${API_BASE}/api/contact`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name, email, message }),
       });
 
-      const data = await res.json();
+      const raw = await res.text();
+      let data: ContactApiResponse;
+
+      try {
+        data = JSON.parse(raw);
+      } catch {
+        throw new Error(raw.slice(0, 160));
+      }
+
+      if (!res.ok) throw new Error(data.error ?? "Failed to send message.");
 
       if (data.success) {
         alert("Message sent successfully!");
@@ -61,7 +75,6 @@ export default function Contact() {
       transition={{ duration: 0.5 }}
       className="max-w-5xl mx-auto px-4 py-16"
     >
-      {/* Back */}
       <motion.button
         whileHover={{ x: -4 }}
         whileTap={{ scale: 0.95 }}
@@ -72,7 +85,6 @@ export default function Contact() {
         Back
       </motion.button>
 
-      {/* Header */}
       <div className="mb-12">
         <h1 className="text-3xl font-extrabold text-head">
           Let’s Work Together
@@ -83,9 +95,7 @@ export default function Contact() {
         </p>
       </div>
 
-      {/* Grid */}
       <div className="grid md:grid-cols-2 gap-8">
-        {/* CONTACT FORM */}
         <motion.form
           initial={{ opacity: 0, x: -30 }}
           animate={{ opacity: 1, x: 0 }}
@@ -98,7 +108,6 @@ export default function Contact() {
             Contact Form
           </h2>
 
-          {/* Name */}
           <div>
             <label className="text-sm font-medium text-muted">Full Name</label>
             <div className="mt-1 flex items-center gap-2 rounded-md border border-black/20 dark:border-white/20 bg-white/70 dark:bg-white/5 px-3 py-2 focus-within:border-black dark:focus-within:border-white focus-within:ring-1 focus-within:ring-black/30 dark:focus-within:ring-white/30 transition">
@@ -113,7 +122,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Email */}
           <div>
             <label className="text-sm font-medium text-muted">
               Email Address
@@ -130,7 +138,6 @@ export default function Contact() {
             </div>
           </div>
 
-          {/* Message */}
           <div>
             <label className="text-sm font-medium text-muted">Message</label>
             <textarea
@@ -142,7 +149,6 @@ export default function Contact() {
             />
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
@@ -152,9 +158,7 @@ export default function Contact() {
           </button>
         </motion.form>
 
-        {/* RIGHT COLUMN */}
         <div className="space-y-8">
-          {/* AVAILABILITY */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -182,7 +186,6 @@ export default function Contact() {
             </ul>
           </motion.div>
 
-          {/* SOCIAL LINKS */}
           <motion.div
             initial={{ opacity: 0, x: 30 }}
             animate={{ opacity: 1, x: 0 }}
@@ -194,7 +197,6 @@ export default function Contact() {
             </h2>
 
             <div className="space-y-3">
-              {/* Email */}
               <motion.a
                 whileHover={{ x: 4 }}
                 href="mailto:lumborhenrhena@gmail.com"
@@ -204,7 +206,6 @@ export default function Contact() {
                 lumborhenrhena@gmail.com
               </motion.a>
 
-              {/* LinkedIn */}
               <motion.a
                 whileHover={{ x: 4 }}
                 href="https://linkedin.com/in/yourprofile"
@@ -216,7 +217,6 @@ export default function Contact() {
                 linkedin.com/in/yourprofile
               </motion.a>
 
-              {/* GitHub */}
               <motion.a
                 whileHover={{ x: 4 }}
                 href="https://github.com/yourusername"

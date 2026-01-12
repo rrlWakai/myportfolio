@@ -8,6 +8,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 import { Bot, Send, X, Trash2 } from "lucide-react";
 import { Link } from "react-router-dom";
+import { API_BASE } from "../config";
 
 type Role = "user" | "assistant";
 
@@ -31,10 +32,6 @@ const STARTER: ChatMsg = {
   text: "Hi! I’m Rhen-Rhen’s portfolio assistant. Ask me about skills, services, or projects.",
 };
 
-// ✅ Set in Vercel env vars:
-// VITE_API_BASE_URL = https://myportfolio-server.onrender.com
-const API_BASE = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
-
 function linkify(text: string) {
   const parts: React.ReactNode[] = [];
   const urlRegex = /(https?:\/\/[^\s]+)|(\bContact page\b)/gi;
@@ -50,7 +47,6 @@ function linkify(text: string) {
 
     const token = match[0];
 
-    // "Contact page" → internal SPA link
     if (/^contact page$/i.test(token)) {
       parts.push(
         <Link
@@ -62,9 +58,7 @@ function linkify(text: string) {
         </Link>
       );
     } else {
-      // URL → external link (trim trailing punctuation)
       const clean = token.replace(/[),.!?]+$/g, "");
-
       parts.push(
         <a
           key={`${start}-${end}`}
@@ -141,12 +135,6 @@ export default function ChatWidget() {
     setMessages((prev) => [...prev, { role: "user", text }]);
 
     try {
-      if (!API_BASE) {
-        throw new Error(
-          "Missing VITE_API_BASE_URL. Please set it in Vercel Environment Variables."
-        );
-      }
-
       const res = await fetch(`${API_BASE}/api/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -159,7 +147,7 @@ export default function ChatWidget() {
       try {
         data = JSON.parse(raw) as ChatApiResponse;
       } catch {
-        throw new Error(raw.slice(0, 140));
+        throw new Error(raw.slice(0, 140)); // shows HTML error safely
       }
 
       if (!res.ok) throw new Error(data.error ?? "Chat request failed.");
@@ -170,7 +158,6 @@ export default function ChatWidget() {
       ]);
     } catch (err) {
       console.error(err);
-
       setMessages((prev) => [
         ...prev,
         {
@@ -194,6 +181,7 @@ export default function ChatWidget() {
 
   return (
     <>
+      {/* Floating button */}
       <button
         onClick={() => setOpen(true)}
         className="
@@ -212,6 +200,7 @@ export default function ChatWidget() {
         <Bot size={18} />
       </button>
 
+      {/* Panel */}
       <AnimatePresence>
         {open && (
           <motion.div
@@ -233,11 +222,13 @@ export default function ChatWidget() {
             aria-modal="true"
             aria-label="Portfolio assistant chat"
           >
+            {/* Header */}
             <div className="px-4 py-3 flex items-center justify-between border-b border-black/10 dark:border-white/10">
               <div className="flex items-center gap-3">
                 <span className="inline-flex w-9 h-9 items-center justify-center rounded-xl bg-black/5 dark:bg-white/10 ring-1 ring-black/10 dark:ring-white/10">
                   <Bot size={16} className="text-accent" />
                 </span>
+
                 <div className="leading-tight">
                   <p className="text-sm font-semibold text-head">
                     Portfolio Assistant
@@ -283,6 +274,7 @@ export default function ChatWidget() {
               </div>
             </div>
 
+            {/* Messages */}
             <div
               ref={listRef}
               className="
@@ -294,25 +286,6 @@ export default function ChatWidget() {
                 dark:[scrollbar-color:rgba(255,255,255,.18)_transparent]
               "
             >
-              <div
-                aria-hidden="true"
-                className="
-                  pointer-events-none absolute inset-0
-                  opacity-100
-                  [mask-image:radial-gradient(ellipse_at_top,black,transparent_70%)]
-                "
-              >
-                <div className="absolute inset-0 bg-gradient-to-b from-black/[0.03] via-transparent to-black/[0.04] dark:from-white/[0.05] dark:to-white/[0.02]" />
-                <div
-                  className="
-                    absolute inset-0 opacity-[0.10] dark:opacity-[0.12]
-                    [background-image:linear-gradient(to_right,rgba(0,0,0,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(0,0,0,0.08)_1px,transparent_1px)]
-                    dark:[background-image:linear-gradient(to_right,rgba(255,255,255,0.10)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.10)_1px,transparent_1px)]
-                    [background-size:22px_22px]
-                  "
-                />
-              </div>
-
               {messages.map((m, idx) => {
                 const isUser = m.role === "user";
                 return (
@@ -358,6 +331,7 @@ export default function ChatWidget() {
               )}
             </div>
 
+            {/* Input */}
             <div className="p-3 border-t border-black/10 dark:border-white/10">
               <div className="flex items-center gap-2">
                 <input
