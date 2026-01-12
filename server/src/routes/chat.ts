@@ -9,6 +9,10 @@ type HistoryItem = {
   role: "user" | "assistant";
   text: string;
 };
+router.get("/", (_req, res) => {
+  res.status(200).json({ ok: true, hint: "Use POST /api/chat" });
+});
+
 
 router.post("/", async (req: Request, res: Response) => {
   try {

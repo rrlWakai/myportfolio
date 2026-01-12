@@ -1,5 +1,5 @@
 import "dotenv/config";
-import express, { type Request, type Response, type NextFunction } from "express";
+import express from "express";
 import cors from "cors";
 
 import contactRouter from "./routes/contact";
@@ -7,55 +7,47 @@ import chatRouter from "./routes/chat";
 
 const app = express();
 
-// Middleware
+/* 1️⃣ Body parser */
 app.use(express.json());
+
+/* 2️⃣ CORS — PUT IT HERE */
 app.use(
   cors({
     origin: (origin, cb) => {
-      const allowed = [
-        process.env.FRONTEND_URL, // Vercel frontend
-        "http://localhost:5173",  // local dev
-      ].filter(Boolean);
-
-      // allow non-browser tools (Postman, curl)
       if (!origin) return cb(null, true);
 
-      if (allowed.includes(origin)) return cb(null, true);
+      const isLocal = origin === "http://localhost:5173";
+      const isVercel = origin.endsWith(".vercel.app");
+      const isProd =
+        process.env.FRONTEND_URL &&
+        origin === process.env.FRONTEND_URL;
+
+      if (isLocal || isVercel || isProd) return cb(null, true);
       return cb(new Error("Not allowed by CORS"));
     },
     credentials: true,
   })
 );
 
-
-// Routes
+/* 3️⃣ Routes (AFTER CORS) */
 app.use("/api/contact", contactRouter);
 app.use("/api/chat", chatRouter);
 
-// Health check
-app.get("/", (_req: Request, res: Response) => {
+/* 4️⃣ Health check */
+app.get("/", (_req, res) => {
   res.send("Backend is running!");
 });
 
-// Debug env (GET in browser)
-app.get("/api/debug-env", (_req: Request, res: Response) => {
+/* 5️⃣ Debug */
+app.get("/api/debug-env", (_req, res) => {
   res.json({
-    hasGoogleKey: Boolean(process.env.GOOGLE_API_KEY),
-    frontendUrl: process.env.FRONTEND_URL || null,
-    port: process.env.PORT || null,
+    frontendUrl: process.env.FRONTEND_URL,
+    port: process.env.PORT,
   });
 });
 
-// Global error handler (must be after routes)
-app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
-  console.error("🔥 Express error:", err);
-  res.status(500).json({
-    error: err?.message || String(err),
-    stack: err?.stack || null,
-  });
-});
-
+/* 6️⃣ Start server */
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running on http://localhost:${PORT}`);
+  console.log(`🚀 Backend running on port ${PORT}`);
 });
