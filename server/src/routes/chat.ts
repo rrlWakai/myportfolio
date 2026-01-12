@@ -11,8 +11,8 @@ type HistoryItem = {
 };
 
 // ✅ GET health check so browser doesn't show "Not Found"
-router.get("/", (_req: Request, res: Response) => {
-  return res.json({ ok: true, route: "/api/chat", method: "GET" });
+router.get("/", (_req, res) => {
+  res.status(200).json({ ok: true, message: "Chat route is alive. Use POST." });
 });
 
 router.post("/", async (req: Request, res: Response) => {
