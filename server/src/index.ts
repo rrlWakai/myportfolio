@@ -16,7 +16,7 @@ app.use(
     origin: (origin, cb) => {
       if (!origin) return cb(null, true);
 
-      const isLocal = origin === "http://localhost:5173";
+      const isLocal = origin === "http://localhost:10000";
       const isVercel = origin.endsWith(".vercel.app");
       const isProd =
         process.env.FRONTEND_URL &&
