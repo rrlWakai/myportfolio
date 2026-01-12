@@ -15,10 +15,12 @@ router.get("/", (_req, res) => {
   res.status(200).json({ ok: true, message: "Chat route is alive. Use POST." });
 });
 
+// ✅ Helps with CORS preflight in some setups
+router.options("/", (_req, res) => res.sendStatus(204));
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const apiKey = process.env.GOOGLE_API_KEY;
-
     if (!apiKey) {
       return res.status(500).json({
         error: "Server misconfigured: GOOGLE_API_KEY is missing in server/.env",
@@ -35,6 +37,17 @@ router.post("/", async (req: Request, res: Response) => {
     if (!message || typeof message !== "string") {
       return res.status(400).json({ error: "Message is required." });
     }
+
+    const safeHistory = Array.isArray(history)
+      ? history
+          .slice(-10)
+          .filter(
+            (h) =>
+              h &&
+              (h.role === "user" || h.role === "assistant") &&
+              typeof h.text === "string"
+          )
+      : [];
 
     const systemInstruction = `
 You are ${portfolioContext.owner}’s portfolio assistant.
@@ -85,7 +98,7 @@ ${portfolioContext.projects
 `.trim();
 
     const contents = [
-      ...history.map((h) => ({
+      ...safeHistory.map((h) => ({
         role: h.role === "assistant" ? "model" : "user",
         parts: [{ text: h.text }],
       })),
@@ -104,14 +117,15 @@ ${portfolioContext.projects
 
     const reply =
       result?.candidates?.[0]?.content?.parts
-        ?.map((p: any) => p.text)
+        ?.map((p) => ("text" in p ? (p as { text?: string }).text ?? "" : ""))
         .join("")
         .trim() || "Sorry, I couldn’t respond.";
 
     return res.json({ reply });
-  } catch (error: any) {
-    console.error("🔥 Gemini chat error:", error?.message || error);
-    return res.status(500).json({ error: error?.message || "AI chat failed." });
+  } catch (error: unknown) {
+    const msg = error instanceof Error ? error.message : String(error);
+    console.error("🔥 Gemini chat error:", msg);
+    return res.status(500).json({ error: msg || "AI chat failed." });
   }
 });
 
