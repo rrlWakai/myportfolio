@@ -10,6 +10,11 @@ type HistoryItem = {
   text: string;
 };
 
+// ✅ GET health check so browser doesn't show "Not Found"
+router.get("/", (_req: Request, res: Response) => {
+  return res.json({ ok: true, route: "/api/chat", method: "GET" });
+});
+
 router.post("/", async (req: Request, res: Response) => {
   try {
     const apiKey = process.env.GOOGLE_API_KEY;
@@ -31,24 +36,9 @@ router.post("/", async (req: Request, res: Response) => {
       return res.status(400).json({ error: "Message is required." });
     }
 
-    /* ================= SYSTEM CONTEXT ================= */
     const systemInstruction = `
 You are ${portfolioContext.owner}’s portfolio assistant.
-Rhen-Rhen uses he/him pronouns. Refer to Rhen-Rhen as "he" and "him".
-
 Be concise, friendly, and professional.
-
-================ PERSONAL INFORMATION RULES =================
-You may share ONLY the following personal information if asked:
-
-• Email: ${portfolioContext.contact.email}
-• Phone number: ${portfolioContext.contact.phone ?? "Prefer contact via Contact page"}
-• Life verse: "${portfolioContext.personal.lifeVerse}"
-
-Rules:
-- Never invent or guess personal information
-- If asked for unavailable or private details, politely redirect to the Contact page
-- Encourage professional contact through: ${portfolioContext.contact.contactPage}
 
 ================ AVAILABILITY =================
 Status: ${portfolioContext.availability.status}
@@ -56,11 +46,11 @@ Focus: ${portfolioContext.availability.focus.join(", ")}
 Location/Time zone: ${portfolioContext.availability.location}
 
 When asked about availability:
-- If the user asks about rates, timelines, or availability, respond briefly and direct them to Contact.
-- When discussing internships, keep responses professional and learning-oriented.
-
-
-
+- Confirm availability using the Status line
+- Mention focus areas (what work is a fit)
+- Invite them to contact using: ${portfolioContext.availability.contactHint}
+- Do not promise timelines or immediate start unless explicitly provided
+- If asked about rates/timelines, respond briefly and direct them to Contact.
 
 ================ TECH STACK (SOURCE OF TRUTH) ================
 Frontend:
@@ -85,38 +75,15 @@ ${portfolioContext.projects
   .join("")}
 
 ================ RULES =================
+- Use he/him pronouns for Rhen-Rhen (he is a man)
 - Only mention technologies listed above
 - Be honest about experience level
 - Emphasize front-end strengths
 - Clearly state backend is currently being learned
 - Do NOT invent employers, credentials, or projects
 - If unsure, guide users to the Contact page
+`.trim();
 
-You can help with:
-- Explaining projects and tech choices
-- Describing skills and workflow
-- Answering portfolio-related questions
-- Guiding users to the Contact page
-================ PROJECT RESPONSE FORMAT =================
-When describing projects, always use this exact format:
-
-<Project Name>
-<1 sentence description>
-Tech: <comma-separated tech list>
-Live: <live site URL>
-
-Rules:
-- Do NOT number the projects
-- Do NOT use bullet points
-- Separate projects with a blank line
-- Keep descriptions concise and professional
-
-`
-;
-
-
-
-    /* ================= CHAT CONTENT ================= */
     const contents = [
       ...history.map((h) => ({
         role: h.role === "assistant" ? "model" : "user",
@@ -125,7 +92,6 @@ Rules:
       { role: "user", parts: [{ text: message }] },
     ];
 
-    /* ================= GEMINI CALL ================= */
     const result = await ai.models.generateContent({
       model: MODEL,
       contents,
@@ -135,10 +101,6 @@ Rules:
         maxOutputTokens: 300,
       },
     });
-    router.get("/", (_req, res) => {
-  res.json({ ok: true, route: "/api/chat", method: "GET" });
-});
-
 
     const reply =
       result?.candidates?.[0]?.content?.parts
@@ -149,9 +111,7 @@ Rules:
     return res.json({ reply });
   } catch (error: any) {
     console.error("🔥 Gemini chat error:", error?.message || error);
-    return res.status(500).json({
-      error: error?.message || "AI chat failed.",
-    });
+    return res.status(500).json({ error: error?.message || "AI chat failed." });
   }
 });
 
