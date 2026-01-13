@@ -1,6 +1,6 @@
 export const portfolioContext = {
   owner: "Rhen-Rhen Lumbo",
-  pronouns:"He / Him",
+  pronouns:"He/Him",
 
   contact: {
     email: "lumborhenrhena@gmail.com",
