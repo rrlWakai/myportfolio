@@ -65,7 +65,23 @@ export const projects: Project[] = [
       "Vercel",
     ],
   },
-
+{
+    id: 2,
+    title: "Saling Cafe",
+    description:
+      "A modern dental clinic website featuring a professional UI, responsive layout, and clear consultation booking flow.",
+    thumbnail: "/projects/SalingCafe.png",
+    liveUrl: "https://sailingcafe.vercel.app/",
+    githubUrl: "https://github.com/rrlWakai/CoffeWebsite.git",
+    techStack: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Vite",
+      "Vercel",
+    ],
+  },
 ];
 
 // ================= OPTIONAL BOOKING =================
