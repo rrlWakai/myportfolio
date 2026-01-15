@@ -65,6 +65,23 @@ export const projects: Project[] = [
       "Vercel",
     ],
   },
+    {
+    id: 3,
+    title: "Saling Cafe",
+    description:
+      "Saling Café is a modern café website designed to create a warm and inviting digital experience. It features a clean layout, smooth animations, and responsive design to showcase the café’s menu, ambiance, and brand identity across all devices.",
+    thumbnail: "/projects/SalingCafe.png",
+    liveUrl: "https://sailingcafe.vercel.app/",
+    githubUrl: "https://github.com/rrlWakai/CoffeWebsite.git",
+    techStack: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Vite",
+      "Vercel",
+    ],
+  },
 ];
 
 // ================= OPTIONAL BOOKING =================
