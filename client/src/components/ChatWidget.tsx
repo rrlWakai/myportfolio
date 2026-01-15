@@ -226,13 +226,11 @@ export default function ChatWidget() {
             <div className="px-4 py-3 flex items-center justify-between border-b border-black/10 dark:border-white/10">
               <div className="flex items-center gap-3">
                 <span className="inline-flex w-9 h-9 items-center justify-center rounded-xl bg-black/5 dark:bg-white/10 ring-1 ring-black/10 dark:ring-white/10">
-                  <Bot size={16} className="text-accent" />
+                  <img src="./avatar.png" alt="Rhen" />
                 </span>
 
                 <div className="leading-tight">
-                  <p className="text-sm font-semibold text-head">
-                    Portfolio Assistant
-                  </p>
+                  <p className="text-sm font-semibold text-head">Rhen-Rhen</p>
                   <p className="text-xs text-muted">
                     Skills • Services • Projects
                   </p>
@@ -371,11 +369,6 @@ export default function ChatWidget() {
                   <Send size={16} />
                 </button>
               </div>
-
-              <p className="mt-2 text-[11px] text-muted">
-                Tip: ask “What tech stack do you use?” or “How can I contact
-                you?”
-              </p>
             </div>
           </motion.div>
         )}
