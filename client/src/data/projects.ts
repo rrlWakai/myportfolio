@@ -69,7 +69,7 @@ export const projects: Project[] = [
     id: 3,
     title: "Saling Cafe",
     description:
-      "A modern dental clinic website featuring a professional UI, responsive layout, and clear consultation booking flow.",
+      "Saling Café’s website is designed to reflect a warm and welcoming café atmosphere while making it easy for customers to explore the menu and learn more about the brand. The site works beautifully on phones, tablets, and desktops, helping attract and engage customers online.",
     thumbnail: "/projects/SalingCafe.png",
     liveUrl: "https://sailingcafe.vercel.app/",
     githubUrl: "https://github.com/rrlWakai/CoffeWebsite.git",
