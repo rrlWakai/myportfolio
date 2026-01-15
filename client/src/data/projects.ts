@@ -66,7 +66,7 @@ export const projects: Project[] = [
     ],
   },
 {
-    id: 2,
+    id: 3,
     title: "Saling Cafe",
     description:
       "A modern dental clinic website featuring a professional UI, responsive layout, and clear consultation booking flow.",
