@@ -44,19 +44,21 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
           className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3"
         >
           {projects.map((project: Project) => (
-            <motion.li key={project.id} variants={item}>
+            <motion.li key={project.id} variants={item} className="h-full">
               <motion.div
                 whileHover={{ y: -6 }}
                 transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                className={`${cardBase} group`}
+                className={`${cardBase} group h-full flex flex-col`}
               >
+                {/* Image (fixed height – unchanged styling) */}
                 <img
                   src={project.thumbnail}
                   alt={project.title}
                   className="h-44 w-full object-cover"
                 />
 
-                <div className="p-4">
+                {/* Content */}
+                <div className="p-4 flex flex-col flex-1">
                   <h3 className="font-semibold text-lg text-black dark:text-white">
                     {project.title}
                   </h3>
@@ -65,19 +67,20 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                     {project.description}
                   </p>
 
-                  <div className="mt-4 flex gap-4">
+                  {/* Actions pinned to bottom */}
+                  <div className="mt-auto flex gap-4 pt-4">
                     {project.liveUrl && (
                       <a
                         href={project.liveUrl}
                         target="_blank"
                         rel="noreferrer"
                         className="
-                          inline-flex items-center gap-1
-                          text-sm font-medium
-                          text-black-600
-                          dark:hover:text-white/800
-                          transition-colors
-                        "
+                    inline-flex items-center gap-1
+                    text-sm font-medium
+                    text-black-600
+                    dark:hover:text-white/800
+                    transition-colors
+                  "
                       >
                         <ExternalLink size={16} />
                         Live
@@ -90,12 +93,12 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                         target="_blank"
                         rel="noreferrer"
                         className="
-                          inline-flex items-center gap-1
-                          text-sm font-medium
-                          text-black-600
-                           dark:hover:text-white
-                          transition-colors
-                        "
+                    inline-flex items-center gap-1
+                    text-sm font-medium
+                    text-black-600
+                    dark:hover:text-white
+                    transition-colors
+                  "
                       >
                         <Github size={16} />
                         Code
@@ -104,13 +107,14 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                   </div>
                 </div>
 
+                {/* Hover overlay (unchanged) */}
                 <div
                   className="
-                    pointer-events-none absolute inset-0
-                    opacity-0 group-hover:opacity-100 transition
-                    bg-linear-to-tr from-black/5 to-transparent
-                    dark:from-white/10
-                  "
+              pointer-events-none absolute inset-0
+              opacity-0 group-hover:opacity-100 transition
+              bg-linear-to-tr from-black/5 to-transparent
+              dark:from-white/10
+            "
                 />
               </motion.div>
             </motion.li>
