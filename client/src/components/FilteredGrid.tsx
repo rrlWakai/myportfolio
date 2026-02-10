@@ -358,27 +358,21 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                         loading="lazy"
                       />
 
-                      <span className="text-sm font-medium text-black/70 dark:text-white/80">
+                      {/* ✅ tech title color now matches Live/Code */}
+                      <span className="text-sm font-medium text-black-600 dark:hover:text-white transition-colors">
                         {tech.title}
                       </span>
 
-                      {/* Tooltip */}
+                      {/* Tooltip (unchanged) */}
                       <div
                         className="
-                          pointer-events-none
+                      
                           absolute left-1/2 top-full z-20
-                          mt-2 w-56 -translate-x-1/2
+                          mt-2 w-52 -translate-x-1/2
                           rounded-lg
-                          border border-black/10
-                          bg-white/95 text-black/70
+                          bg-black text-black-600
                           px-3 py-2
-                          text-xs leading-relaxed
-                          opacity-0 scale-95
-                          transition
-                          group-hover:opacity-100 group-hover:scale-100
-                          shadow-lg
-                          hidden sm:block
-                          dark:border-white/15 dark:bg-black/70 dark:text-white/80
+                        
                         "
                       >
                         {tech.description}
