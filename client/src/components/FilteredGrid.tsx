@@ -194,19 +194,19 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                       {project.description}
                     </p>
 
-                    <div className="mt-auto flex flex-wrap gap-4 pt-4">
+                    <div className="mt-auto flex gap-4 pt-4">
                       {project.liveUrl && (
                         <a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noreferrer"
                           className="
-                            inline-flex items-center gap-1
-                            text-sm font-medium
-                            text-black/70 hover:text-black
-                            dark:text-white/70 dark:hover:text-white
-                            transition-colors
-                          "
+                    inline-flex items-center gap-1
+                    text-sm font-medium
+                    text-black-600
+                    dark:hover:text-white/800
+                    transition-colors
+                  "
                         >
                           <ExternalLink size={16} />
                           Live
@@ -219,12 +219,12 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                           target="_blank"
                           rel="noreferrer"
                           className="
-                            inline-flex items-center gap-1
-                            text-sm font-medium
-                            text-black/70 hover:text-black
-                            dark:text-white/70 dark:hover:text-white
-                            transition-colors
-                          "
+                    inline-flex items-center gap-1
+                    text-sm font-medium
+                    text-black-600
+                    dark:hover:text-white
+                    transition-colors
+                  "
                         >
                           <Github size={16} />
                           Code
