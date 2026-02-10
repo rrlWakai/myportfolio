@@ -82,6 +82,15 @@ export const projects: Project[] = [
       "Vercel",
     ],
   },
+    {
+    id: 4,
+    title: "Timeless Resort",
+    description:
+      "A luxury resort landing page concept built with a modern, responsive layout, smooth animations, and clear sections that guide users toward booking and inquiries.",
+    thumbnail: "/projects/timelessresort.png",
+    liveUrl: "https://timelessresort.vercel.app/",
+    techStack: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite", "Vercel"],
+  },
 ];
 
 // ================= OPTIONAL BOOKING =================
