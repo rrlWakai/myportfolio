@@ -11,6 +11,41 @@ import Services from "../components/Services";
 import Process from "../components/Process";
 import LocalTimeCard from "../components/LocalTimeCard";
 
+/* ---------- Education: Process Bulletin Item (minimal) ---------- */
+function EducationStep({
+  title,
+  subtitle,
+  meta,
+  children,
+}: {
+  title: string;
+  subtitle?: string;
+  meta: string; // e.g., "2nd Year • In Progress" / "Graduate"
+  children: React.ReactNode;
+}) {
+  return (
+    <div className="relative pl-6">
+      {/* dot */}
+      <div className="absolute left-[3px] top-[7px] h-1.5 w-1.5 rounded-full bg-black/35 dark:bg-white/35" />
+
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <div className="min-w-0">
+          <p className="text-sm font-semibold tracking-wide">{title}</p>
+          {subtitle ? (
+            <p className="text-xs text-muted mt-1">{subtitle}</p>
+          ) : null}
+        </div>
+
+        <span className="text-[11px] px-2 py-0.5 rounded-full border border-black/10 dark:border-white/15 bg-white/60 dark:bg-white/10 text-muted">
+          {meta}
+        </span>
+      </div>
+
+      <p className="text-sm text-muted leading-relaxed mt-2">{children}</p>
+    </div>
+  );
+}
+
 export default function Home() {
   const [activeFilter, setActiveFilter] = useState<FilterType>("projects");
 
@@ -38,62 +73,44 @@ export default function Home() {
               disableHover
             >
               <p className="text-sm text-muted leading-relaxed">
-                I’m <strong>Rhen-Rhen A. Lumbo</strong>, a BSIT student with a
-                strong focus on front-end development, currently preparing for
-                Web & Mobile App Development (WMAD). I specialize in building
-                clean, responsive, and well-structured user interfaces using
-                modern front-end tools and best practices.
+                I’m <strong>Rhen-Rhen A. Lumbo</strong>, a BSIT student who
+                helps small businesses and teams present their brand
+                professionally through a clean, modern website. My goal is to
+                turn your ideas into a site that looks trustworthy and is easy
+                for people to use.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-4">
-                I work primarily with React, TypeScript, and Tailwind CSS to
-                translate ideas and designs into functional, maintainable
-                components. I pay close attention to layout consistency,
-                spacing, typography, and responsiveness to ensure interfaces
-                remain usable and visually polished across different screen
-                sizes.
+                I can help you build pages that clearly explain what you
+                offer—such as a homepage, services, gallery, pricing, FAQs, and
+                contact page—so visitors can quickly understand your business
+                and take action (message, inquire, or book).
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-4">
-                Through personal and real-world–inspired projects, I’ve gained
-                hands-on experience building multi-section websites, reusable UI
-                components, form handling, and basic API integration. I value
-                clean code, readability, and scalability, and I continuously
-                refine my workflow as I learn.
+                I focus on making websites <strong>fast</strong>,{" "}
+                <strong>mobile-friendly</strong>, and <strong>organized</strong>
+                , with clear layout and readable content. This helps customers
+                find information faster and makes your business look more
+                credible.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-4">
-                While front-end development is my strongest area today, I’m
-                intentionally expanding into back-end fundamentals such as APIs,
-                databases, and application structure. My long-term goal is to
-                become a well-rounded full-stack developer capable of
-                contributing effectively to real-world projects and team-based
-                environments.
+                If you already have a website, I can also help improve it by
+                redesigning the layout, fixing sections that feel confusing, and
+                making the overall experience smoother—so your website works
+                better for your customers, not just looks good.
               </p>
+
+              <ul className="mt-4 space-y-2 text-sm text-muted leading-relaxed">
+                <li>• Business / portfolio websites</li>
+                <li>• Landing pages for promotions or services</li>
+                <li>• Website redesign (cleaner layout + better flow)</li>
+                <li>• Simple contact / inquiry forms</li>
+              </ul>
             </AnimatedCard>
 
-            {/* EDUCATION — now directly below About */}
-            <AnimatedCard
-              className="glass"
-              title="EDUCATION"
-              icon="education"
-              disableHover
-            >
-              <p className="text-sm text-muted leading-relaxed">
-                Currently a 2nd-year Bachelor of Science in Information
-                Technology (BSIT) student, preparing to pursue Web & Mobile App
-                Development (WMAD). Alongside academic coursework, I actively
-                build front-end projects to strengthen my understanding of
-                responsive design, component-based architecture, and modern UI
-                development workflows.
-              </p>
-            </AnimatedCard>
-          </div>
-
-          {/* RIGHT COLUMN */}
-          <div className="space-y-4">
-            <LocalTimeCard disableHover />
-
+            {/* FOCUS */}
             <AnimatedCard
               className="glass"
               title="FOCUS"
@@ -103,9 +120,9 @@ export default function Home() {
               <p className="text-sm text-muted leading-relaxed">
                 My current focus is strengthening front-end fundamentals while
                 applying them to real-world scenarios. This includes building
-                reusable React components, improving responsive layouts,
-                refining UI consistency, and handling common features such as
-                forms, validations, and API-driven data.
+                reusable components, improving responsive layouts, refining UI
+                consistency, and handling common features such as forms,
+                validations, and API-driven data.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-3">
@@ -114,6 +131,63 @@ export default function Home() {
                 toward full-stack development as I progress academically and
                 professionally.
               </p>
+            </AnimatedCard>
+          </div>
+
+          {/* RIGHT COLUMN */}
+          <div className="space-y-4">
+            <LocalTimeCard disableHover />
+
+            {/* EDUCATION — process bulletin (latest on top) */}
+            <AnimatedCard
+              className="glass"
+              title="EDUCATION"
+              icon="education"
+              disableHover
+            >
+              <div className="relative">
+                {/* minimal rail */}
+                <div className="absolute left-[4px] top-2 bottom-2 w-px bg-black/10 dark:bg-white/15" />
+
+                <div className="space-y-5">
+                  {/* Latest FIRST */}
+                  <EducationStep
+                    title="Bachelor of Science in Information Technology (BSIT)"
+                    subtitle="Track: Web & Mobile App Development (WMAD)"
+                    meta="2nd Year • In Progress"
+                  >
+                    Strengthening front-end development while expanding into
+                    APIs, databases, and full-stack application structure.
+                  </EducationStep>
+
+                  <EducationStep
+                    title="Senior High School"
+                    subtitle="TVL – Programming Strand"
+                    meta="Graduate"
+                  >
+                    Focused on programming fundamentals, logic building, and
+                    introductory web development concepts.
+                  </EducationStep>
+
+                  <EducationStep
+                    title="Junior High School"
+                    subtitle="Completed"
+                    meta="Graduate"
+                  >
+                    Developed analytical thinking, communication, and early
+                    exposure to ICT-related subjects.
+                  </EducationStep>
+
+                  <EducationStep
+                    title="Elementary Education"
+                    subtitle="Completed"
+                    meta="Graduate"
+                  >
+                    Built strong foundational skills in mathematics, reading,
+                    and basic computer literacy.
+                  </EducationStep>
+                </div>
+              </div>
             </AnimatedCard>
           </div>
         </section>
