@@ -155,9 +155,7 @@ export default function Hero() {
           San Pablo City, Laguna, Philippines
         </p>
 
-        <p className="text-sm font-medium">
-          Front-end Developer / Web Designer
-        </p>
+        <p className="text-sm font-medium">Web Developer / Web Designer</p>
 
         <p className="text-sm text-muted max-w-md">
           I build modern, results-driven websites for individuals and growing
