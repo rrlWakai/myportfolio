@@ -1,23 +1,24 @@
 import { motion } from "framer-motion";
-import { Layout, Briefcase, Code2 } from "lucide-react";
+import { Layout, Monitor, CalendarCheck } from "lucide-react";
+
 const services = [
   {
-    title: "Personal Portfolio Development",
+    title: "Website Design & Development",
     description:
-      "Design and development of responsive personal portfolios that clearly present projects, skills, and technical background using clean layouts and modern UI practices.",
+      "Modern, mobile-friendly websites designed to build trust and clearly present your brand. Clean layouts, smooth navigation, and a professional look that helps visitors take action.",
     icon: Layout,
   },
   {
-    title: "Small Business Website Development",
+    title: "High-Converting Landing Pages",
     description:
-      "Structured, mobile-first websites for small businesses featuring clear content sections, professional layout, and user-friendly navigation to support online presence.",
-    icon: Briefcase,
+      "Focused landing pages built to promote a product, service, or campaign. Clear messaging, strong call-to-action, and structured sections that guide visitors toward booking or contacting you.",
+    icon: Monitor,
   },
   {
-    title: "Front-End UI Development (React)",
+    title: "Full Booking System Website",
     description:
-      "Front-end development using React, TypeScript, and Tailwind CSS—focused on reusable components, responsive design, clean structure, and maintainable code.",
-    icon: Code2,
+      "Complete booking websites where customers can check availability, reserve online, and receive confirmations automatically — helping you save time and manage appointments efficiently.",
+    icon: CalendarCheck,
   },
 ];
 
@@ -25,9 +26,13 @@ export default function Services() {
   return (
     <section className="space-y-6">
       {/* HEADER */}
-      <div className="text-center">
+      <div className="text-center max-w-2xl mx-auto">
         <h2 className="text-xl font-extrabold text-head">SERVICES</h2>
-        <p className="text-sm text-muted">What I can help you build</p>
+        <p className="text-sm text-muted mt-2 leading-relaxed">
+          I focus on building websites that don’t just look good — they help
+          businesses attract customers, build credibility, and operate more
+          efficiently online.
+        </p>
       </div>
 
       {/* CARDS */}
@@ -42,15 +47,12 @@ export default function Services() {
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
               className="glass rounded-xl p-6 transition hover:shadow-lg"
             >
-              {/* ICON */}
               <Icon size={22} className="icons mb-3" />
 
-              {/* TITLE */}
               <h3 className="text-base font-semibold text-head">
                 {service.title}
               </h3>
 
-              {/* DESCRIPTION */}
               <p className="mt-2 text-sm text-muted leading-relaxed">
                 {service.description}
               </p>

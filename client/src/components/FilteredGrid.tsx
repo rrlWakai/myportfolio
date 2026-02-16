@@ -30,7 +30,13 @@ const cardBase = `
   dark:bg-white/5
 `;
 
-const categories = ["Frontend", "Tools", "Backend"] as const;
+// ✅ Updated: now includes Programming Languages (still inside "tech" tab)
+const categories = [
+  "Frontend",
+  "Tools",
+  "Backend",
+  "Programming Languages",
+] as const;
 
 /* ================= CAROUSEL HELPERS ================= */
 function useHorizontalScrollState(
@@ -201,12 +207,12 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                           target="_blank"
                           rel="noreferrer"
                           className="
-                    inline-flex items-center gap-1
-                    text-sm font-medium
-                    text-black-600
-                    dark:hover:text-white/800
-                    transition-colors
-                  "
+                            inline-flex items-center gap-1
+                            text-sm font-medium
+                            text-black-600
+                            dark:hover:text-white/800
+                            transition-colors
+                          "
                         >
                           <ExternalLink size={16} />
                           Live
@@ -219,12 +225,12 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                           target="_blank"
                           rel="noreferrer"
                           className="
-                    inline-flex items-center gap-1
-                    text-sm font-medium
-                    text-black-600
-                    dark:hover:text-white
-                    transition-colors
-                  "
+                            inline-flex items-center gap-1
+                            text-sm font-medium
+                            text-black-600
+                            dark:hover:text-white
+                            transition-colors
+                          "
                         >
                           <Github size={16} />
                           Code
@@ -318,7 +324,7 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
         </motion.div>
       )}
 
-      {/* ================= TECH STACK (KEEP GRID — BEST UX) ================= */}
+      {/* ================= TECH STACK (KEEP GRID — NO HOVER) ================= */}
       {active === "tech" && (
         <motion.div
           variants={container}
@@ -332,7 +338,7 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
 
             return (
               <div key={category}>
-                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-gray-400">
+                <h3 className="mb-3 text-xs font-semibold uppercase tracking-wide text-muted">
                   {category}
                 </h3>
 
@@ -344,12 +350,16 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                     <motion.li
                       key={tech.title}
                       variants={item}
-                      className={`
-                        relative group
+                      className="
                         flex items-center gap-3
                         px-4 py-3
-                        ${cardBase}
-                      `}
+                        rounded-xl
+                        border border-black/10
+                        bg-white/80 backdrop-blur-md
+                        shadow-sm
+                        dark:border-white/15
+                        dark:bg-white/5
+                      "
                     >
                       <img
                         src={tech.logo}
@@ -358,25 +368,9 @@ export default function FilteredGrid({ active }: { active: FilterType }) {
                         loading="lazy"
                       />
 
-                      {/* ✅ tech title color now matches Live/Code */}
-                      <span className="text-sm font-medium text-black-600 dark:hover:text-white transition-colors">
+                      <span className="text-sm font-medium text-muted">
                         {tech.title}
                       </span>
-
-                      {/* Tooltip (unchanged) */}
-                      <div
-                        className="
-                      
-                          absolute left-1/2 top-full z-20
-                          mt-2 w-52 -translate-x-1/2
-                          rounded-lg
-                          bg-black text-black-600
-                          px-3 py-2
-                        
-                        "
-                      >
-                        {tech.description}
-                      </div>
                     </motion.li>
                   ))}
                 </motion.ul>

@@ -19,13 +19,18 @@ export type Booking = {
   techStack: string[];
 };
 
-export type TechCategory = "Frontend" | "Tools" | "Backend";
+// ✅ Added Programming Languages category
+export type TechCategory =
+  | "Frontend"
+  | "Backend"
+  | "Tools"
+  | "Programming Languages";
 
 export type TechItem = {
   title: string;
   description: string;
   logo: string;
-  category: TechCategory; // ✅ ADDED
+  category: TechCategory;
 };
 
 export type Certificate = {
@@ -42,7 +47,7 @@ export const projects: Project[] = [
     id: 1,
     title: "Photographer Portfolio Website",
     description:
-      "A clean and elegant photography portfolio website designed to showcase creative works, personal branding, and services with a modern, responsive layout.",
+      "A clean and elegant photography portfolio website designed to showcase creative works and services with a modern responsive layout.",
     thumbnail: "/projects/photographer-portfolio.png",
     liveUrl: "https://photographer-portfolio-jet-three.vercel.app",
     githubUrl: "https://github.com/rrlWakai/photographer-portfolio",
@@ -52,7 +57,7 @@ export const projects: Project[] = [
     id: 2,
     title: "SmileCare Booking App",
     description:
-      "A modern dental clinic website featuring a professional UI, responsive layout, and clear consultation booking flow.",
+      "A modern dental clinic website with responsive UI and structured consultation booking flow.",
     thumbnail: "/projects/smilecare.png",
     liveUrl: "https://smilecarebookingapp.vercel.app/",
     githubUrl: "https://github.com/rrlWakai/dental-appointment-app",
@@ -62,14 +67,13 @@ export const projects: Project[] = [
       "Tailwind CSS",
       "Framer Motion",
       "Vite",
-      "Vercel",
     ],
   },
-{
+  {
     id: 3,
     title: "Saling Cafe",
     description:
-      "Saling Café’s website is designed to reflect a warm and welcoming café atmosphere while making it easy for customers to explore the menu and learn more about the brand. The site works beautifully on phones, tablets, and desktops, helping attract and engage customers online.",
+      "A warm and welcoming café website designed to showcase menu and brand story while working smoothly across devices.",
     thumbnail: "/projects/SalingCafe.png",
     liveUrl: "https://sailingcafe.vercel.app/",
     githubUrl: "https://github.com/rrlWakai/CoffeWebsite.git",
@@ -79,18 +83,23 @@ export const projects: Project[] = [
       "Tailwind CSS",
       "Framer Motion",
       "Vite",
-      "Vercel",
     ],
   },
-    {
+  {
     id: 4,
     title: "Timeless Resort",
     description:
-      "A luxury resort landing page concept built with a modern, responsive layout, smooth animations, and clear sections that guide users toward booking and inquiries.",
+      "A luxury resort landing page with smooth animations and structured sections guiding users toward booking and inquiries.",
     thumbnail: "/projects/timelessresort.png",
     liveUrl: "https://timelessresort.vercel.app/",
     githubUrl: "https://github.com/rrlWakai/TimelessProject.git",
-    techStack: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Vite", "Vercel"],
+    techStack: [
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Vite",
+    ],
   },
 ];
 
@@ -99,8 +108,7 @@ export const booking: Booking[] = [
   {
     id: 1,
     title: "Portfolio Website",
-    description:
-      "A modern portfolio showcasing projects, skills, and certifications.",
+    description: "A modern portfolio showcasing projects and skills.",
     thumbnail: "/projects/portfolio.png",
     liveUrl: "https://your-portfolio.vercel.app",
     githubUrl: "https://github.com/yourname/portfolio",
@@ -108,73 +116,100 @@ export const booking: Booking[] = [
   },
 ];
 
-// ================= TECH STACK (GROUPED) =================
+// ================= TECH STACK =================
 export const techStack: TechItem[] = [
   // -------- Frontend --------
   {
     title: "HTML",
-    description: "Semantic structure for accessible, SEO-friendly layouts.",
+    description: "Semantic structure for accessible layouts.",
     logo: "/icons/html.png",
     category: "Frontend",
   },
   {
     title: "CSS",
-    description: "Responsive styling, layout systems, and modern UI polish.",
+    description: "Responsive styling and layout systems.",
     logo: "/icons/css-3.png",
     category: "Frontend",
   },
   {
     title: "JavaScript",
-    description: "Interactive UI logic, DOM handling, and web functionality.",
+    description: "Core scripting language for web interactivity.",
     logo: "/icons/js.png",
     category: "Frontend",
   },
   {
     title: "React",
-    description: "Component-based UI library for scalable interfaces.",
+    description: "Component-based UI development.",
     logo: "/icons/atom.png",
     category: "Frontend",
   },
   {
     title: "TypeScript",
-    description: "Typed JavaScript for safer, scalable applications.",
+    description: "Typed JavaScript for scalable applications.",
     logo: "/icons/typescript.png",
     category: "Frontend",
   },
   {
     title: "Tailwind CSS",
-    description: "Utility-first CSS framework for rapid UI development.",
+    description: "Utility-first CSS framework.",
     logo: "/logos/tailwindcss.svg",
     category: "Frontend",
   },
 
+  // -------- Backend --------
+  {
+    title: "Node.js",
+    description: "JavaScript runtime for backend services.",
+    logo: "/icons/node.png",
+    category: "Backend",
+  },
+
+    {
+    title: "Php",
+    description: "Server-side scripting language for web development.",
+    logo: "/icons/php.png",
+    category: "Programming Languages",
+  },
+  {
+    title: "MySQL",
+    description: "Relational database management system.",
+    logo: "/icons/mysql.png",
+    category: "Backend",
+  },
   // -------- Tools --------
   {
     title: "Vite",
-    description: "Fast development server and modern build tool.",
+    description: "Fast development build tool.",
     logo: "/logos/vite.svg",
     category: "Tools",
   },
   {
     title: "Git",
-    description: "Distributed version control system.",
+    description: "Version control system.",
     logo: "/icons/social.png",
     category: "Tools",
   },
   {
     title: "GitHub",
-    description: "Code hosting platform for collaboration and version control.",
+    description: "Code hosting and collaboration platform.",
     logo: "/icons/github.png",
     category: "Tools",
   },
 
-  // -------- Backend (Learning / Early Stage) --------
+  // -------- Programming Languages --------
   {
-    title: "Node.js",
-    description: "JavaScript runtime for backend services and APIs.",
-    logo: "/icons/node.png",
-    category: "Backend",
+    title: "C#",
+    description: "Object-oriented programming language for applications and systems.",
+    logo: "/icons/csharp.png",
+    category: "Programming Languages",
   },
+  {
+    title: "Java",
+    description: "Widely-used programming language for backend and software development.",
+    logo: "/icons/java.png",
+    category: "Programming Languages",
+  },
+
 ];
 
 // ================= CERTIFICATES =================

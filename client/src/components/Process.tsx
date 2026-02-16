@@ -4,27 +4,27 @@ import { Search, PenTool, Code, Rocket } from "lucide-react";
 const steps = [
   {
     step: "01",
-    title: "Discovery",
+    title: "Understand Your Needs",
     icon: Search,
-    desc: "Understanding project goals, requirements, and expectations.",
+    desc: "We talk about your goals, your customers, and what you want the website to achieve (more inquiries, bookings, or sales).",
   },
   {
     step: "02",
-    title: "Design",
+    title: "Plan & Design the Layout",
     icon: PenTool,
-    desc: "Creating clear, usable layouts and structured UI concepts.",
+    desc: "I create a clear page structure and design that looks professional and guides visitors toward your main action (message, call, or book).",
   },
   {
     step: "03",
-    title: "Development",
+    title: "Build & Connect Everything",
     icon: Code,
-    desc: "Building fast, responsive, and scalable front-end solutions.",
+    desc: "I develop the website so it works smoothly on mobile and desktop — and if needed, I connect forms or booking features so customers can take action easily.",
   },
   {
     step: "04",
-    title: "Launch",
+    title: "Test & Launch",
     icon: Rocket,
-    desc: "Testing, refinement, and preparing for deployment.",
+    desc: "I check everything before going live (speed, responsiveness, and usability), then launch the website and make final refinements.",
   },
 ];
 
@@ -49,16 +49,13 @@ export default function Process() {
               transition={{ type: "spring", stiffness: 260, damping: 20 }}
               className="glass rounded-xl p-5 transition hover:shadow-lg"
             >
-              {/* ICON + STEP */}
               <div className="flex items-center gap-2 mb-2">
                 <Icon size={18} className="icons" />
                 <span className="text-xs font-medium text-muted">{s.step}</span>
               </div>
 
-              {/* TITLE */}
               <h3 className="font-semibold text-head">{s.title}</h3>
 
-              {/* DESCRIPTION */}
               <p className="mt-2 text-sm text-muted leading-relaxed">
                 {s.desc}
               </p>

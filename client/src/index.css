@@ -1,27 +1,24 @@
 @import "tailwindcss";
 
 /* =========================================================
-   1) BRAND ACCENT SYSTEM (1)
+   1) BRAND ACCENT SYSTEM (NO slash alpha)
    ========================================================= */
 :root{
-  /* Accent: Slate Blue (clean + tech) */
-  --accent: 74 99 216;          /* rgb */
-  --accent-weak: 74 99 216 / .12;
-  --accent-ring: 74 99 216 / .35;
+  --accent: rgb(74, 99, 216);
+  --accent-weak: rgba(74, 99, 216, 0.12);
+  --accent-ring: rgba(74, 99, 216, 0.35);
 }
 
 .dark{
-  /* brighter accent for dark mode */
-  --accent: 138 180 248;
-  --accent-weak: 138 180 248 / .14;
-  --accent-ring: 138 180 248 / .40;
+  --accent: rgb(138, 180, 248);
+  --accent-weak: rgba(138, 180, 248, 0.14);
+  --accent-ring: rgba(138, 180, 248, 0.40);
 }
 
-/* Utility helpers (use in className if you want) */
-.text-accent { color: rgb(var(--accent)); }
-.bg-accent { background: rgb(var(--accent)); }
-.border-accent { border-color: rgb(var(--accent) / .35); }
-.ring-accent { --tw-ring-color: rgb(var(--accent-ring)); }
+/* Utility helpers */
+.text-accent { color: var(--accent); }
+.bg-accent { background: var(--accent); }
+.ring-accent { --tw-ring-color: var(--accent-ring); }
 
 /* =========================================================
    BASE
@@ -30,11 +27,13 @@ html { scroll-behavior: smooth; }
 
 body {
   font-family: "Inter", system-ui, sans-serif;
-  @apply antialiased transition-colors duration-300;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  transition: background-color 300ms ease, color 300ms ease;
 }
 
 /* =========================================================
-   LIGHT / DARK BACKGROUND
+   PAGE BACKGROUND
    ========================================================= */
 body {
   background:
@@ -51,13 +50,27 @@ body {
 }
 
 /* =========================================================
+   TEXT SYSTEM
+   ========================================================= */
+.text-muted { color: #3f3f46; } /* zinc-700 */
+.dark .text-muted { color: #c7c7c7; }
+
+/* Head helpers */
+.text-head { color:#18181b; }
+.dark .text-head { color:#f4f4f5; }
+
+.icons { color:#27272a; }
+.dark .icons { color:#d4d4d8; }
+
+/* =========================================================
    GLASS
    ========================================================= */
 .glass {
-  background: rgba(255,255,255,0.85);
+  background: rgba(255,255,255,0.86);
   border: 1px solid rgba(0,0,0,0.08);
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
+  color: #111;
 }
 
 .dark .glass {
@@ -65,34 +78,100 @@ body {
   border: 1px solid rgba(255,255,255,0.14);
   -webkit-backdrop-filter: blur(18px);
   backdrop-filter: blur(18px);
+  color: #f5f5f5;
 }
 
 /* =========================================================
-   TEXT SYSTEM
+   EDUCATION MUTED – POLISHED
    ========================================================= */
-.text-muted { color: #555; }
-.dark .text-muted { color: #b5b5b5; }
 
-/* optional: if you're using these classes elsewhere */
-.text-head { color:#1d1c1c; }
-.dark .text-head { color:#e7e7e7; }
+/* Base muted (slightly darker for better readability) */
+.education-muted {
+  color: #3f3f46; /* zinc-700 */
+}
 
-.icons { color:#2a2929; }
-.dark .icons { color:#cfcfcf; }
+.dark .education-muted {
+  color: #a1a1aa; /* zinc-400 */
+}
+
+/* Title */
+.education-muted .edu-title {
+  color: #18181b; /* zinc-900 */
+}
+
+.dark .education-muted .edu-title {
+  color: #f4f4f5; /* zinc-100 */
+}
+
+/* Stronger for current */
+.education-muted .edu-title-current {
+  color: #111827; /* deeper dark */
+}
+
+.dark .education-muted .edu-title-current {
+  color: #ffffff;
+}
+
+/* Subtitle */
+.education-muted .edu-sub {
+  color: #52525b; /* zinc-600 */
+}
+
+.dark .education-muted .edu-sub {
+  color: #9ca3af;
+}
+
+/* Separator dot */
+
+
+
+/* Body */
+.education-muted .edu-body {
+  color: #3f3f46; /* zinc-700 */
+}
+
+.dark .education-muted .edu-body {
+  color: #a1a1aa;
+}
+
+/* Badge */
+.education-muted .edu-badge {
+  background: #f4f4f5;
+  border-color: #d4d4d8;
+  color: #52525b;
+}
+
+.dark .education-muted .edu-badge {
+  background: rgba(255,255,255,0.10);
+  border-color: rgba(255,255,255,0.20);
+  color: #d4d4d8;
+}
+
+/* Current Badge */
+.education-muted .edu-badge-current {
+  background: #e4e4e7;
+  border-color: #a1a1aa;
+  color: #18181b;
+}
+
+.dark .education-muted .edu-badge-current {
+  background: rgba(255,255,255,0.18);
+  border-color: rgba(255,255,255,0.30);
+  color: #ffffff;
+}
 
 /* =========================================================
    HEADINGS
    ========================================================= */
 h1, h2, h3, h4 {
-  @apply font-semibold tracking-tight;
+  font-weight: 600;
+  letter-spacing: -0.01em;
   color: #111;
 }
 .dark h1, .dark h2, .dark h3, .dark h4 { color: #fff; }
 
 /* =========================================================
-   2) MICRO-INTERACTIONS FOR BUTTONS (2)
-   - .btn (primary)
-   - .btn-outline (secondary)
+   BUTTONS
    ========================================================= */
 .btn{
   background-color:#111;
@@ -101,12 +180,12 @@ h1, h2, h3, h4 {
 }
 .btn:hover{
   transform: translateY(-2px);
-  box-shadow: 0 10px 24px rgba(0,0,0,.10);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.10);
 }
 .btn:active{ transform: translateY(0); }
 .btn:focus-visible{
   outline: none;
-  box-shadow: 0 0 0 4px rgb(var(--accent-ring));
+  box-shadow: 0 0 0 4px var(--accent-ring);
 }
 
 .dark .btn{
@@ -114,7 +193,7 @@ h1, h2, h3, h4 {
   color:#111;
 }
 .dark .btn:hover{
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
 }
 
 .btn-outline{
@@ -125,13 +204,13 @@ h1, h2, h3, h4 {
 }
 .btn-outline:hover{
   transform: translateY(-2px);
-  border-color: rgb(var(--accent) / .45);
-  box-shadow: 0 10px 24px rgba(0,0,0,.08);
+  border-color: rgba(74, 99, 216, 0.45);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.08);
 }
 .btn-outline:active{ transform: translateY(0); }
 .btn-outline:focus-visible{
   outline: none;
-  box-shadow: 0 0 0 4px rgb(var(--accent-ring));
+  box-shadow: 0 0 0 4px var(--accent-ring);
 }
 
 .dark .btn-outline{
@@ -139,34 +218,12 @@ h1, h2, h3, h4 {
   color: #fff;
 }
 .dark .btn-outline:hover{
-  border-color: rgb(var(--accent) / .55);
-  box-shadow: 0 10px 24px rgba(0,0,0,.35);
+  border-color: rgba(138, 180, 248, 0.55);
+  box-shadow: 0 10px 24px rgba(0,0,0,0.35);
 }
 
 /* =========================================================
-   HERO CONTRAST FIXES (kept, but adjusted to not fight accent)
-   ========================================================= */
-.hero h1 { color: #111; }
-.dark .hero h1 { color: #ffffff; }
-
-.hero p.font-medium { color: #222; }
-.dark .hero p.font-medium { color: #d6d6d6; }
-
-/* If you want hero icons muted EXCEPT the accent ones:
-   (Your MapPin uses .text-accent in my suggestion, so it won't be affected) */
-.dark .hero svg { color: #9a9a9a; }
-
-/* Avatar background fallback (if image fails) */
-.hero > div:first-child { background: rgba(0,0,0,0.08); }
-.dark .hero > div:first-child { background: rgba(255,255,255,0.14); }
-
-/* Outline link inside hero (Download CV) - optional override if not using btn-outline */
-.hero a { border-color: rgba(0,0,0,0.35); color: #111; }
-.dark .hero a { border-color: rgba(255,255,255,0.45); color: #ffffff; }
-
-/* =========================================================
-   4) OPTIONAL PREMIUM HERO GLOW (4)
-   - subtle, brand-based, doesn’t clutter
+   HERO GLOW
    ========================================================= */
 .hero{
   position: relative;
@@ -175,7 +232,7 @@ h1, h2, h3, h4 {
   content:"";
   position:absolute;
   inset:-24px;
-  background: radial-gradient(circle at 20% 10%, rgb(var(--accent-weak)), transparent 45%);
+  background: radial-gradient(circle at 20% 10%, var(--accent-weak), transparent 45%);
   filter: blur(10px);
   z-index:-1;
   pointer-events:none;

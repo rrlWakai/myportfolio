@@ -11,38 +11,83 @@ import Services from "../components/Services";
 import Process from "../components/Process";
 import LocalTimeCard from "../components/LocalTimeCard";
 
-/* ---------- Education: Process Bulletin Item (minimal) ---------- */
+/* =========================
+   EDUCATION STEP (Polished CV + subtle scroll animation)
+   - Each item animates when it enters viewport
+   ========================= */
 function EducationStep({
   title,
   subtitle,
-  meta,
+  years,
+  status,
+  current = false,
   children,
 }: {
   title: string;
   subtitle?: string;
-  meta: string; // e.g., "2nd Year • In Progress" / "Graduate"
+  years: string;
+  status: string;
+  current?: boolean;
   children: React.ReactNode;
 }) {
   return (
-    <div className="relative pl-6">
-      {/* dot */}
-      <div className="absolute left-[3px] top-[7px] h-1.5 w-1.5 rounded-full bg-black/35 dark:bg-white/35" />
+    <motion.div
+      className="relative pl-10"
+      initial={{ opacity: 0, y: 14 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.5 }}
+      transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+    >
+      {/* Dot */}
+      <span
+        className={[
+          "absolute left-[4px] top-[12px] rounded-full transition-all",
+          current
+            ? "h-3 w-3 bg-zinc-950 dark:bg-white"
+            : "h-2.5 w-2.5 bg-zinc-700 dark:bg-zinc-300",
+        ].join(" ")}
+      />
 
-      <div className="flex flex-wrap items-baseline justify-between gap-2">
+      <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
-          <p className="text-sm font-semibold tracking-wide">{title}</p>
-          {subtitle ? (
-            <p className="text-xs text-muted mt-1">{subtitle}</p>
-          ) : null}
+          {/* Title */}
+          <p
+            className={[
+              "edu-title text-sm font-semibold tracking-tight",
+              current ? "edu-title-current" : "",
+            ].join(" ")}
+          >
+            {title}
+          </p>
+
+          {/* Subtitle + Years */}
+          <div className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1">
+            {subtitle && (
+              <span className="edu-sub text-xs leading-tight">{subtitle}</span>
+            )}
+
+            <span className="edu-sep">•</span>
+
+            <span className="edu-sub text-xs font-semibold whitespace-nowrap">
+              {years}
+            </span>
+          </div>
         </div>
 
-        <span className="text-[11px] px-2 py-0.5 rounded-full border border-black/10 dark:border-white/15 bg-white/60 dark:bg-white/10 text-muted">
-          {meta}
+        {/* Status Badge */}
+        <span
+          className={[
+            "edu-badge shrink-0 text-[11px] px-2 py-1 rounded-md border flex items-center justify-center",
+            current ? "edu-badge-current" : "",
+          ].join(" ")}
+        >
+          {status}
         </span>
       </div>
 
-      <p className="text-sm text-muted leading-relaxed mt-2">{children}</p>
-    </div>
+      {/* Body */}
+      <p className="mt-2 text-sm leading-relaxed edu-body">{children}</p>
+    </motion.div>
   );
 }
 
@@ -73,40 +118,39 @@ export default function Home() {
               disableHover
             >
               <p className="text-sm text-muted leading-relaxed">
-                I’m <strong>Rhen-Rhen A. Lumbo</strong>, a BSIT student who
-                helps small businesses and teams present their brand
-                professionally through a clean, modern website. My goal is to
-                turn your ideas into a site that looks trustworthy and is easy
-                for people to use.
+                I’m <strong>Rhen-Rhen A. Lumbo</strong>, a BSIT student focused
+                on helping small businesses and individuals build a strong and
+                professional online presence through clean, modern, and
+                user-friendly websites.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-4">
-                I can help you build pages that clearly explain what you
-                offer—such as a homepage, services, gallery, pricing, FAQs, and
-                contact page—so visitors can quickly understand your business
-                and take action (message, inquire, or book).
+                I create websites that clearly communicate what a business
+                offers—whether it’s services, products, bookings, or
+                portfolios—so visitors can easily understand, trust, and take
+                action. My approach prioritizes clarity, structure, and
+                simplicity over unnecessary complexity.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-4">
-                I focus on making websites <strong>fast</strong>,{" "}
-                <strong>mobile-friendly</strong>, and <strong>organized</strong>
-                , with clear layout and readable content. This helps customers
-                find information faster and makes your business look more
-                credible.
+                Every website I build is designed to be fast, responsive, and
+                organized. I focus on making sure the layout feels natural, the
+                content is easy to read, and the overall experience works
+                smoothly across all devices.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-4">
-                If you already have a website, I can also help improve it by
-                redesigning the layout, fixing sections that feel confusing, and
-                making the overall experience smoother—so your website works
-                better for your customers, not just looks good.
+                As I continue growing in the field of web development, I aim to
+                not only improve how websites look—but how they function,
+                support business goals, and create real value for the people who
+                use them.
               </p>
 
               <ul className="mt-4 space-y-2 text-sm text-muted leading-relaxed">
-                <li>• Business / portfolio websites</li>
-                <li>• Landing pages for promotions or services</li>
-                <li>• Website redesign (cleaner layout + better flow)</li>
-                <li>• Simple contact / inquiry forms</li>
+                <li>• Professional business & portfolio websites</li>
+                <li>• Landing pages for services and promotions</li>
+                <li>• Website redesign & layout improvement</li>
+                <li>• Clean and simple contact & inquiry systems</li>
               </ul>
             </AnimatedCard>
 
@@ -118,18 +162,17 @@ export default function Home() {
               disableHover
             >
               <p className="text-sm text-muted leading-relaxed">
-                My current focus is strengthening front-end fundamentals while
-                applying them to real-world scenarios. This includes building
-                reusable components, improving responsive layouts, refining UI
-                consistency, and handling common features such as forms,
-                validations, and API-driven data.
+                Right now, I’m focused on improving how websites look and feel.
+                I work on making layouts clean, responsive on all devices, and
+                easy to use so visitors can navigate smoothly and enjoy the
+                experience.
               </p>
 
               <p className="text-sm text-muted leading-relaxed mt-3">
-                I’m also gradually learning back-end concepts to better
-                understand full application flow, with the goal of transitioning
-                toward full-stack development as I progress academically and
-                professionally.
+                I’m also learning how websites work behind the scenes so I can
+                build complete solutions — not just good-looking pages, but
+                systems that function properly and help businesses serve their
+                customers better.
               </p>
             </AnimatedCard>
           </div>
@@ -138,53 +181,52 @@ export default function Home() {
           <div className="space-y-4">
             <LocalTimeCard disableHover />
 
-            {/* EDUCATION — process bulletin (latest on top) */}
+            {/* EDUCATION */}
             <AnimatedCard
               className="glass"
               title="EDUCATION"
               icon="education"
               disableHover
             >
-              <div className="relative">
-                {/* minimal rail */}
-                <div className="absolute left-[4px] top-2 bottom-2 w-px bg-black/10 dark:bg-white/15" />
+              <div className="relative education-muted pr-2">
+                {/* Stronger visible rail */}
 
-                <div className="space-y-5">
-                  {/* Latest FIRST */}
+                <div className="space-y-2">
                   <EducationStep
-                    title="Bachelor of Science in Information Technology (BSIT)"
-                    subtitle="Track: Web & Mobile App Development (WMAD)"
-                    meta="2nd Year • In Progress"
+                    title="Laguna State Polytechnic University - San Pablo City Campus"
+                    subtitle="Bachelor of Science in Information Technology (BSIT)"
+                    years="2024 — Present"
+                    status="In Progress"
+                    current
                   >
-                    Strengthening front-end development while expanding into
-                    APIs, databases, and full-stack application structure.
+                    College
                   </EducationStep>
 
                   <EducationStep
-                    title="Senior High School"
+                    title="Crecencia Drusila Lopez Senior High School"
                     subtitle="TVL – Programming Strand"
-                    meta="Graduate"
+                    years="2022 — 2024"
+                    status="Graduate"
                   >
-                    Focused on programming fundamentals, logic building, and
-                    introductory web development concepts.
+                    Senior High School
                   </EducationStep>
 
                   <EducationStep
-                    title="Junior High School"
+                    title="Prudencia D. Fule Memorial National High School"
                     subtitle="Completed"
-                    meta="Graduate"
+                    years="2018 — 2022"
+                    status="Graduate"
                   >
-                    Developed analytical thinking, communication, and early
-                    exposure to ICT-related subjects.
+                    Junior High School
                   </EducationStep>
 
                   <EducationStep
-                    title="Elementary Education"
+                    title="Prudencia D. Fule Memorial Elementary School"
                     subtitle="Completed"
-                    meta="Graduate"
+                    years="2012 — 2018"
+                    status="Graduate"
                   >
-                    Built strong foundational skills in mathematics, reading,
-                    and basic computer literacy.
+                    Elementary
                   </EducationStep>
                 </div>
               </div>
