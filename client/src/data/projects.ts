@@ -221,4 +221,12 @@ export const certificates: Certificate[] = [
     date: "2025",
     image: "/certificates/DataAnalytics.png",
   },
+  {
+    id: 2,
+    title: "Web Development Fundamentals",
+    issuer: "IBM SkillsBuild",
+    date: "2026",
+    image: "/certificates/WebDev.png",
+  },
+
 ];
