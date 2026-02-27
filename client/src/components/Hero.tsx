@@ -536,8 +536,10 @@ export default function Hero() {
         <p className="text-sm font-medium">Web Developer / Web Designer</p>
 
         <p className="text-sm text-muted max-w-md">
-          I build modern, results-driven websites for individuals and growing
-          businesses.
+          I help businesses and individuals establish a strong online presence
+          through modern, responsive, and user-friendly websites. With a passion
+          for clean design and efficient code, I create digital experiences that
+          are both visually appealing and highly functional.
         </p>
 
         <div className="flex items-center gap-3 mt-3">
