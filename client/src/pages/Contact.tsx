@@ -14,12 +14,10 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { API_BASE } from "../config";
-import "../components/contact.css";
 
 type ContactApiResponse = { success?: boolean; error?: string };
 type Slot = { time: string; available: boolean };
 
-// ✅ FIX: cn helper (prevents "Cannot find name 'cn'")
 function cn(...classes: Array<string | false | null | undefined>) {
   return classes.filter(Boolean).join(" ");
 }
@@ -27,15 +25,19 @@ function cn(...classes: Array<string | false | null | undefined>) {
 function startOfDay(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), d.getDate());
 }
+
 function startOfMonth(d: Date) {
   return new Date(d.getFullYear(), d.getMonth(), 1);
 }
+
 function endOfMonth(d: Date) {
   return new Date(d.getFullYear(), d.getMonth() + 1, 0);
 }
+
 function addMonths(d: Date, n: number) {
   return new Date(d.getFullYear(), d.getMonth() + n, 1);
 }
+
 function sameDay(a: Date, b: Date) {
   return (
     a.getFullYear() === b.getFullYear() &&
@@ -43,9 +45,11 @@ function sameDay(a: Date, b: Date) {
     a.getDate() === b.getDate()
   );
 }
+
 function formatMonthYear(d: Date) {
   return d.toLocaleString(undefined, { month: "long", year: "numeric" });
 }
+
 function formatFullDate(d: Date) {
   return d.toLocaleString(undefined, {
     weekday: "long",
@@ -54,24 +58,19 @@ function formatFullDate(d: Date) {
     year: "numeric",
   });
 }
+
 function dateKey(d: Date) {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(
     d.getDate(),
   ).padStart(2, "0")}`;
 }
 
-/**
- * Demo availability logic (swap later with your backend).
- * - Weekdays only
- * - Future dates only
- * - Some blocked dates
- */
 function isAvailableDate(day: Date) {
   const d = startOfDay(day);
   const today = startOfDay(new Date());
   if (d < today) return false;
 
-  const dow = d.getDay(); // 0 Sun - 6 Sat
+  const dow = d.getDay();
   const weekday = dow >= 1 && dow <= 5;
   if (!weekday) return false;
 
@@ -116,13 +115,11 @@ function findFirstAvailableNear(d: Date) {
 export default function Contact() {
   const navigate = useNavigate();
 
-  // Contact form state
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [sending, setSending] = useState(false);
 
-  // Calendar state
   const [cursorMonth, setCursorMonth] = useState(() =>
     startOfMonth(new Date()),
   );
@@ -145,9 +142,8 @@ export default function Contact() {
   }, [monthStart, monthEnd]);
 
   const gridDays = useMemo(() => {
-    // Monday-start calendar grid
     const first = monthStart;
-    const firstDow = (first.getDay() + 6) % 7; // Mon=0 ... Sun=6
+    const firstDow = (first.getDay() + 6) % 7;
     const gridStart = new Date(first);
     gridStart.setDate(first.getDate() - firstDow);
 
@@ -179,12 +175,14 @@ export default function Contact() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
     if (!name || !email || !message) {
       alert("Please fill in all fields.");
       return;
     }
 
     setSending(true);
+
     try {
       const res = await fetch(`${API_BASE}/api/contact`, {
         method: "POST",
@@ -194,6 +192,7 @@ export default function Contact() {
 
       const raw = await res.text();
       let data: ContactApiResponse;
+
       try {
         data = JSON.parse(raw);
       } catch {
@@ -201,6 +200,7 @@ export default function Contact() {
       }
 
       if (!res.ok) throw new Error(data.error ?? "Failed to send message.");
+
       if (data.success) {
         alert("Message sent successfully!");
         setName("");
@@ -219,6 +219,7 @@ export default function Contact() {
 
   const confirmCall = () => {
     if (!selectedDate || !selectedTime || !selectedSlotAvailable) return;
+
     alert(
       `Call scheduled!\n\n${formatFullDate(selectedDate)}\n${selectedTime}\nGMT+8 (PH)`,
     );
@@ -231,14 +232,14 @@ export default function Contact() {
       initial={{ opacity: 0, y: 28 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45 }}
-      className="contactPage"
+      className="contact-page"
     >
-      <button className="backBtn" onClick={() => navigate(-1)}>
+      <button className="contact-backBtn" onClick={() => navigate(-1)}>
         <ArrowLeft size={16} />
         Back
       </button>
 
-      <header className="header">
+      <header className="contact-header">
         <h1>Let’s Work Together</h1>
         <p>
           Have a project in mind or need a professional website? Send a message
@@ -246,25 +247,23 @@ export default function Contact() {
         </p>
       </header>
 
-      <section className="layout">
-        {/* LEFT COLUMN */}
-        <div className="leftCol">
-          {/* Contact Form */}
+      <section className="contact-layout">
+        <div className="contact-leftCol">
           <motion.form
             initial={{ opacity: 0, x: -18 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.05 }}
             onSubmit={handleSubmit}
-            className="card"
+            className="contact-card"
           >
-            <div className="cardTitle">
+            <div className="contact-cardTitle">
               <MessageSquare size={18} />
               <span>Contact Form</span>
             </div>
 
-            <div className="field">
+            <div className="contact-field">
               <label>Full Name</label>
-              <div className="inputRow">
+              <div className="contact-inputRow">
                 <User size={16} />
                 <input
                   value={name}
@@ -275,9 +274,9 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="field">
+            <div className="contact-field">
               <label>Email Address</label>
-              <div className="inputRow">
+              <div className="contact-inputRow">
                 <Mail size={16} />
                 <input
                   value={email}
@@ -288,9 +287,10 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="field">
+            <div className="contact-field">
               <label>Message</label>
               <textarea
+                className="contact-textarea"
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 placeholder="Tell me about your project..."
@@ -298,30 +298,36 @@ export default function Contact() {
               />
             </div>
 
-            <button className="primaryBtn" type="submit" disabled={sending}>
+            <button
+              className="contact-primaryBtn"
+              type="submit"
+              disabled={sending}
+            >
               {sending ? "Sending..." : "Send Message"}
             </button>
           </motion.form>
 
-          {/* Connect With Me */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
-            className="card"
+            className="contact-card"
           >
-            <div className="cardTitle">
-              <Calendar size={18} />
+            <div className="contact-cardTitle">
+              <Mail size={18} />
               <span>Connect With Me</span>
             </div>
 
-            <a className="linkRow" href="mailto:lumborhenrhena@gmail.com">
+            <a
+              className="contact-linkRow"
+              href="mailto:lumborhenrhena@gmail.com"
+            >
               <Mail size={18} />
               <span>lumborhenrhena@gmail.com</span>
             </a>
 
             <a
-              className="linkRow"
+              className="contact-linkRow"
               href="https://linkedin.com/in/yourprofile"
               target="_blank"
               rel="noreferrer"
@@ -331,7 +337,7 @@ export default function Contact() {
             </a>
 
             <a
-              className="linkRow"
+              className="contact-linkRow"
               href="https://github.com/wakairrl"
               target="_blank"
               rel="noreferrer"
@@ -342,45 +348,42 @@ export default function Contact() {
           </motion.div>
         </div>
 
-        {/* RIGHT COLUMN */}
-        <div className="rightCol">
-          {/* Schedule a Call */}
+        <div className="contact-rightCol">
           <motion.div
             initial={{ opacity: 0, x: 18 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.08 }}
-            className="card"
+            className="contact-card"
           >
-            <div className="scheduleHeader">
-              <div className="scheduleTitle">
+            <div className="contact-scheduleHeader">
+              <div className="contact-scheduleTitle">
                 <Calendar size={18} />
                 <div>
-                  <div className="titleLine">Schedule a Call</div>
-                  <div className="subLine">
+                  <div className="contact-titleLine">Schedule a Call</div>
+                  <div className="contact-subLine">
                     Pick a date and time that works. Unavailable days and fully
                     booked slots are disabled.
                   </div>
-                  <div className="metaLine">Timezone: GMT+8 (PH)</div>
+                  <div className="contact-metaLine">Timezone: GMT+8 (PH)</div>
                 </div>
               </div>
 
               <div
                 className={cn(
-                  "pill",
-                  anyAvailableThisMonth ? "pillOk" : "pillBad",
+                  "contact-pill",
+                  anyAvailableThisMonth ? "contact-pillOk" : "contact-pillBad",
                 )}
               >
-                <span className="dot" />
+                <span className="contact-dot" />
                 {topPillText}
               </div>
             </div>
 
-            <div className="schedulePanel">
-              {/* Calendar side */}
-              <div className="calSide">
-                <div className="calTop">
+            <div className="contact-schedulePanel">
+              <div className="contact-calSide">
+                <div className="contact-calTop">
                   <button
-                    className="iconBtn"
+                    className="contact-iconBtn"
                     onClick={() => {
                       setCursorMonth((m) => addMonths(m, -1));
                       setSelectedTime(null);
@@ -391,12 +394,12 @@ export default function Contact() {
                     <ChevronLeft size={18} />
                   </button>
 
-                  <div className="monthLabel">
+                  <div className="contact-monthLabel">
                     {formatMonthYear(cursorMonth)}
                   </div>
 
                   <button
-                    className="iconBtn"
+                    className="contact-iconBtn"
                     onClick={() => {
                       setCursorMonth((m) => addMonths(m, 1));
                       setSelectedTime(null);
@@ -408,7 +411,7 @@ export default function Contact() {
                   </button>
                 </div>
 
-                <div className="dowRow">
+                <div className="contact-dowRow">
                   {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map(
                     (d) => (
                       <div key={d}>{d}</div>
@@ -416,7 +419,7 @@ export default function Contact() {
                   )}
                 </div>
 
-                <div className="grid">
+                <div className="contact-grid">
                   {gridDays.map((d) => {
                     const inMonth = d.getMonth() === cursorMonth.getMonth();
                     const available = isAvailableDate(d);
@@ -429,11 +432,11 @@ export default function Contact() {
                       <button
                         key={d.toISOString()}
                         className={cn(
-                          "day",
-                          !inMonth && "dayOut",
-                          disabled && "dayDisabled",
-                          available && inMonth && "dayAvail",
-                          selected && "daySelected",
+                          "contact-day",
+                          !inMonth && "contact-dayOut",
+                          disabled && "contact-dayDisabled",
+                          available && inMonth && "contact-dayAvail",
+                          selected && "contact-daySelected",
                         )}
                         disabled={disabled}
                         type="button"
@@ -455,22 +458,23 @@ export default function Contact() {
                   })}
                 </div>
 
-                <div className="legend">
+                <div className="contact-legend">
                   <span>
-                    <i className="legendDot legendSelected" /> Selected
+                    <i className="contact-legendDot contact-legendSelected" />{" "}
+                    Selected
                   </span>
                   <span>
-                    <i className="legendDot legendUnavail" /> Unavailable
+                    <i className="contact-legendDot contact-legendUnavail" />{" "}
+                    Unavailable
                   </span>
                 </div>
               </div>
 
-              <div className="divider" />
+              <div className="contact-divider" />
 
-              {/* Slots side */}
-              <div className="slotSide">
-                <div className="slotTop">
-                  <div className="slotTitle">
+              <div className="contact-slotSide">
+                <div className="contact-slotTop">
+                  <div className="contact-slotTitle">
                     <Clock size={16} />
                     <span>Time slots</span>
                   </div>
@@ -478,11 +482,13 @@ export default function Contact() {
                   {selectedDate ? (
                     <div
                       className={cn(
-                        "pill",
-                        isAvailableDate(selectedDate) ? "pillOk" : "pillBad",
+                        "contact-pill",
+                        isAvailableDate(selectedDate)
+                          ? "contact-pillOk"
+                          : "contact-pillBad",
                       )}
                     >
-                      <span className="dot" />
+                      <span className="contact-dot" />
                       {isAvailableDate(selectedDate)
                         ? "Available"
                         : "Unavailable"}
@@ -490,17 +496,19 @@ export default function Contact() {
                   ) : null}
                 </div>
 
-                <div className="slotDate">
+                <div className="contact-slotDate">
                   {selectedDate
                     ? formatFullDate(selectedDate)
                     : "Select an available date"}
                 </div>
 
-                <div className="slotList">
+                <div className="contact-slotList">
                   {selectedDate ? (
                     slots.map((s) => {
                       const active = selectedTime === s.time;
-                      const pillClass = s.available ? "pillOk" : "pillBad";
+                      const pillClass = s.available
+                        ? "contact-pillOk"
+                        : "contact-pillBad";
 
                       return (
                         <button
@@ -508,35 +516,41 @@ export default function Contact() {
                           type="button"
                           disabled={!s.available}
                           className={cn(
-                            "slotRow",
-                            active && "slotRowActive",
-                            !s.available && "slotRowDisabled",
+                            "contact-slotRow",
+                            active && "contact-slotRowActive",
+                            !s.available && "contact-slotRowDisabled",
                           )}
                           onClick={() => setSelectedTime(s.time)}
                         >
-                          <div className="slotLeft">
-                            <div className="slotTime">{s.time}</div>
-                            <div className="slotSmall">
+                          <div className="contact-slotLeft">
+                            <div className="contact-slotTime">{s.time}</div>
+                            <div className="contact-slotSmall">
                               {s.available ? "Available" : "Unavailable"}
                             </div>
                           </div>
 
-                          <div className={cn("pill", "smallPill", pillClass)}>
-                            <span className="dot" />
+                          <div
+                            className={cn(
+                              "contact-pill",
+                              "contact-smallPill",
+                              pillClass,
+                            )}
+                          >
+                            <span className="contact-dot" />
                             {s.available ? "Available" : "Unavailable"}
                           </div>
                         </button>
                       );
                     })
                   ) : (
-                    <div className="emptySlots">
+                    <div className="contact-emptySlots">
                       Pick an <b>available</b> date to see time slots.
                     </div>
                   )}
                 </div>
 
                 <button
-                  className="confirmBtn"
+                  className="contact-confirmBtn"
                   type="button"
                   onClick={confirmCall}
                   disabled={
@@ -548,28 +562,26 @@ export default function Contact() {
               </div>
             </div>
 
-            <div className="scheduleFooter">
+            <div className="contact-scheduleFooter">
               After confirming, you can route this to your email / Google
               Calendar / booking system.
             </div>
           </motion.div>
 
-          {/* Bottom small card (matches reference) */}
           <motion.div
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.12 }}
-            className="card"
+            className="contact-card"
           >
-            <div className="cardTitle">
-              <Calendar size={18} />
+            <div className="contact-cardTitle">
+              <Mail size={18} />
               <span>Connect With Me</span>
             </div>
 
-            {/* ✅ FIX: no inline styles */}
-            <div className="linkRow linkRowStatic">
+            <div className="contact-linkRow contact-linkRowStatic">
               <Mail size={18} />
-              <span>lumborhenrena@gmail.com</span>
+              <span>lumborhenrhena@gmail.com</span>
             </div>
           </motion.div>
         </div>

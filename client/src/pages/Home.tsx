@@ -10,7 +10,6 @@ import ScrollReveal from "../components/ScrollReveal";
 import Services from "../components/Services";
 import Process from "../components/Process";
 import LocalTimeCard from "../components/LocalTimeCard";
-
 /* =========================
    EDUCATION STEP (Polished CV + subtle scroll animation)
    - Each item animates when it enters viewport

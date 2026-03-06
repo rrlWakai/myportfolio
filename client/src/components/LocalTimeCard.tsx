@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import AnimatedCard from "./AnimatedCard";
 import { Clock } from "lucide-react";
-
 export default function LocalTimeCard({
   disableHover = false,
 }: {
