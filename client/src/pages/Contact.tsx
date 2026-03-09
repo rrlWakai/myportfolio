@@ -567,6 +567,23 @@ export default function Contact() {
               Calendar / booking system.
             </div>
           </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.12 }}
+            className="contact-card"
+          >
+            <div className="contact-cardTitle">
+              <Mail size={18} />
+              <span>Connect With Me</span>
+            </div>
+
+            <div className="contact-linkRow contact-linkRowStatic">
+              <Mail size={18} />
+              <span>lumborhenrhena@gmail.com</span>
+            </div>
+          </motion.div>
         </div>
       </section>
     </motion.main>
