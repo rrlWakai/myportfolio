@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import DarkModeToggle from "./DarkModeToggle";
 
+
 type AvatarMode = "default" | "clicked";
 
 function Section({
