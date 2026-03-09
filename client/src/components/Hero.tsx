@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import DarkModeToggle from "./DarkModeToggle";
 
-
 type AvatarMode = "default" | "clicked";
 
 function Section({
@@ -120,7 +119,7 @@ function CvHeader() {
           target="_blank"
           rel="noreferrer"
         >
-          rhenrhenalumbo.vercel.app <ExternalLink size={14} />
+          lumborhenrhen.vercel.app <ExternalLink size={14} />
         </a>
         <span className="hidden sm:inline">•</span>
         <a
