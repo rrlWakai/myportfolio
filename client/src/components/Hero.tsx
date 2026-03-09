@@ -115,7 +115,7 @@ function CvHeader() {
         <span className="hidden sm:inline">•</span>
         <a
           className="inline-flex items-center gap-1 hover:underline underline-offset-4"
-          href="https://rhenrhenalumbo.vercel.app"
+          href="https://lumborhenrhen.vercel.app/"
           target="_blank"
           rel="noreferrer"
         >
